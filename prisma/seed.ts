@@ -26,14 +26,14 @@ const main = async () => {
           {
             title: 'first blog',
             content: '最初の投稿です。',
-            topImage: dummyImage[1],
-            pubulished: true,
+            topImage: dummyImage[0],
+            published: true,
           },
           {
             title: 'second blog',
             content: '2個目の投稿です。どうもこんにちは',
             topImage: dummyImage[1],
-            pubulished: true,
+            published: true,
           },
         ]
       }
@@ -46,7 +46,7 @@ const main = async () => {
 main()
   .catch((e) => {
     console.error(e);
-    process.exit(1); //TODO exit(1)
+    process.exit(1);
   })
   .finally(async () => {
     await prisma.$disconnect()
