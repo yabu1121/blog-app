@@ -22,7 +22,7 @@ const LoginForm = () => {
   }, [errorMessage, router])
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card>
       <CardHeader>
         <CardTitle>ログイン</CardTitle>
       </CardHeader>

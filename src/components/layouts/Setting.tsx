@@ -2,7 +2,7 @@
 
 import { signOut } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
-import { Settion } from "next-auth"
+import { Session } from "next-auth"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,3 +29,4 @@ export default function Setting({session}:{session: Session}) {
     </DropdownMenu>
   )
 }
+
