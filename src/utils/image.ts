@@ -9,9 +9,9 @@ export const saveImage = async (file: File): Promise<string | null>=> {
   try{
     const filePath = path.join(uploadDir,fileName)
     await writeFile(filePath, buffer,)
-    return `images/${fileName}`
+    return `/images/${fileName}`
   }catch(error){
-    console.log(error)
+    console.error("画像保存エラー")
     return null
   }
 }

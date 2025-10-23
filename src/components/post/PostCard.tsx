@@ -16,7 +16,7 @@ const PostCard = ({post} : PostCardProps) => {
       <Link href={`/posts/${post.id}`}>
         {post.topImage && (
           <div className="relative w-full h-48">
-            <Image 
+            <Image
               src={post.topImage}
               alt={post.title}
               fill
