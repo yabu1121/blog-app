@@ -19,7 +19,11 @@ type DeletePostProps = {
 const DeletePostDialog = ({ postId, isOpen, onOpenChange }: DeletePostProps) => {
   const handleDelete = async () => {
     try {
-      await deletePost(postId);
+      const result = await deletePost(postId);
+      if (!result.success) {
+        const errorMessage = Object.values(result.errors).flat().join(', ');
+        alert(`削除エラー: ${errorMessage}`);
+      }
     } catch (error) {
       console.error('削除エラー:', error);
       alert('記事の削除に失敗しました。もう一度お試しください。');
