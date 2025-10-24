@@ -3,12 +3,13 @@ import { auth } from "@/auth"
 import { Button } from "@/components/ui/button";
 import PostDropdownMenu from "@/components/post/PostDropdownMenu";
 import Link from "next/link";
+import { Post } from "@/types/post";
 
 export default async function DashboardPage() {
   const session = await auth();
   const userId = session?.user?.id
 
-  if(!session?.user?.email || !userId) {
+  if (!session?.user?.email || !userId) {
     throw new Error('不正なリクエストです')
   }
   const posts = await getOwnPosts(userId)
@@ -30,17 +31,17 @@ export default async function DashboardPage() {
           </tr>
         </thead>
         <tbody>
-          {posts.map((post) => (
+          {posts.map((post: { id: string, title: string, published: boolean, updatedAt: Date }) => (
             <tr key={post.id}>
               <td className="border p-2">{post.title}</td>
-              <td className="border p-2 text-center">{post.published ? "表示":"非表示"}</td>
+              <td className="border p-2 text-center">{post.published ? "表示" : "非表示"}</td>
               <td className="border p-2 text-center">
                 {new Date(post.updatedAt).toLocaleDateString('ja-JP', {
                   year: 'numeric',
                   month: '2-digit',
                   day: '2-digit'
                 })}</td>
-              <td className="border p-2 text-center"><PostDropdownMenu postId={post.id}/></td>
+              <td className="border p-2 text-center"><PostDropdownMenu postId={post.id} /></td>
             </tr>
           ))}
         </tbody>

@@ -1,8 +1,8 @@
 'use server'
 
 import { registerSchema } from "@/validations/user"
-import { prisma } from "../prisma" 
-import  bcryptjs  from "bcryptjs"
+import { prisma } from "../prisma"
+import bcryptjs from "bcryptjs"
 import { signIn } from "@/auth"
 import { redirect } from "next/navigation"
 
@@ -12,7 +12,7 @@ type ActionState = {
 }
 
 // バリデーションエラー処理
-const handleValidationError = (error: any): ActionState => {
+const handleValidationError = (error: { flatten: () => { fieldErrors: Record<string, string[]>; formErrors: string[] } }): ActionState => {
   const { fieldErrors, formErrors } = error.flatten();
   const errors = { ...fieldErrors };
   if (formErrors.length > 0) {
@@ -22,15 +22,15 @@ const handleValidationError = (error: any): ActionState => {
 };
 
 //　カスタムエラー処理
-const handleError = (customErrors : Record<string, string[]>): ActionState => {
-  return {success: false , errors:customErrors};
+const handleError = (customErrors: Record<string, string[]>): ActionState => {
+  return { success: false, errors: customErrors };
 }
 
 
 export const createUser = async (
-  prevState : ActionState,
-  formData : FormData
-) : Promise<ActionState> => {
+  prevState: ActionState,
+  formData: FormData
+): Promise<ActionState> => {
   //フォームからわたってきた情報を取得
   const rawFormData = Object.fromEntries(
     ["name", "email", "password", "confirmPassword"].map((field) => [
@@ -41,21 +41,21 @@ export const createUser = async (
 
   //バリデーション
   const validationResult = registerSchema.safeParse(rawFormData)
-  if(!validationResult.success){
+  if (!validationResult.success) {
     return handleValidationError(validationResult.error)
   }
 
   //DBにメールアドレスが存在しているか
   const existingUser = await prisma.user.findUnique({
-    where: {email: rawFormData.email}
+    where: { email: rawFormData.email }
   })
 
-  if(existingUser){
-    return handleError({email: ["このメールアドレスは既に登録されています。"]})
+  if (existingUser) {
+    return handleError({ email: ["このメールアドレスは既に登録されています。"] })
   }
 
   //DBに登録
-  const hashedPassword = await bcryptjs.hash(rawFormData.password,12)
+  const hashedPassword = await bcryptjs.hash(rawFormData.password, 12)
   await prisma.user.create({
     data: {
       name: rawFormData.name,

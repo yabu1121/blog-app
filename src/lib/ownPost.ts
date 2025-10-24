@@ -4,29 +4,29 @@ export const getOwnPost = async (userId: string, postId: string) => {
   return await prisma.post.findFirst({
     where: {
       AND: [
-        {authorId : userId},
-        {id : postId}
+        { authorId: userId },
+        { id: postId }
       ]
     },
-    select:{
+    select: {
       id: true,
       title: true,
-      content:true,
-      topImage:true,
+      content: true,
+      topImage: true,
       author: true,
       published: true,
-      createdAt:true,
+      createdAt: true,
       updatedAt: true,
     },
   })
 }
 
-export const getOwnPosts = async (userId: string) => {
+export const getOwnPosts = async (userId: string): Promise<{ id: string, title: string, published: boolean, updatedAt: Date }[]> => {
   return await prisma.post.findMany({
     where: {
       authorId: userId
     },
-    select:{
+    select: {
       id: true,
       title: true,
       published: true,
