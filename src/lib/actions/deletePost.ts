@@ -8,8 +8,13 @@ type ActionState = {
 }
 
 export const deletePost = async (postId : string): Promise<ActionState>=> {
-  await prisma.post.delete({
-    where : { id : postId }
-  })
-  redirect("/dashboard")
+  try {
+    await prisma.post.delete({
+      where : { id : postId }
+    })
+    redirect("/dashboard")
+  } catch (error) {
+    console.error('記事削除エラー:', error)
+    return {success:false, errors:{ post : ["記事の削除に失敗しました"]}}
+  }
 }
