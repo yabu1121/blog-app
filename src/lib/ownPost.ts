@@ -21,7 +21,7 @@ export const getOwnPost = async (userId: string, postId: string) => {
   })
 }
 
-export const getOwnPosts = async (userId: string): Promise<{ id: string, title: string, published: boolean, updatedAt: Date }[]> => {
+export const getOwnPosts = async (userId: string) => {
   return await prisma.post.findMany({
     where: {
       authorId: userId
