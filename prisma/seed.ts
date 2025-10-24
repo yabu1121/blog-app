@@ -1,4 +1,5 @@
 //ダミーデータを作るためのファイル
+import bcrypt from "bcryptjs";
 
 const { PrismaClient } = require("../src/generated/prisma");
 const bcryptjs = require('bcryptjs');
