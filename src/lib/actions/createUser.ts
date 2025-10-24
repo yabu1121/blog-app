@@ -70,4 +70,7 @@ export const createUser = async (
     redirect: false
   })
   redirect("/dashboard")
+
+  // redirect()の後には到達しないが、TypeScriptの型チェックのために追加
+  return { success: true, errors: {} }
 }

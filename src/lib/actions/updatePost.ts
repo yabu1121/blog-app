@@ -9,10 +9,10 @@ type ActionState = {
   errors: Record<string, string[]>
 }
 export const updatePost = async (
-  prevState : ActionState,
-  formData : FormData
-) : Promise<ActionState> => {
-  
+  prevState: ActionState,
+  formData: FormData
+): Promise<ActionState> => {
+
   // フォームの情報を取得
   const title = formData.get('title') as string
   const content = formData.get('content') as string
@@ -23,25 +23,25 @@ export const updatePost = async (
   const oldImageUrl = formData.get('oldImageUrl') as string
 
   //バリデーション
-  const validationResult = postSchema.safeParse({title, content, topImage})
-  if(!validationResult.success){
-    return {success:false, errors:validationResult.error.flatten().fieldErrors}
+  const validationResult = postSchema.safeParse({ title, content, topImage })
+  if (!validationResult.success) {
+    return { success: false, errors: validationResult.error.flatten().fieldErrors }
   }
 
 
   //画像保存
   let imageUrl = oldImageUrl
-  if(topImage instanceof File && topImage?.size > 0 && topImage.name !=='undefined'){
+  if (topImage instanceof File && topImage?.size > 0 && topImage.name !== 'undefined') {
     const newImageUrl = await saveImage(topImage)
-    if(!newImageUrl){
-      return {success:false, errors:{ image : ["画像の保存に失敗しました"]}}
+    if (!newImageUrl) {
+      return { success: false, errors: { image: ["画像の保存に失敗しました"] } }
     }
     imageUrl = newImageUrl
   }
 
   //DB更新保存
   await prisma.post.update({
-    where : { id : postId },
+    where: { id: postId },
     data: {
       title,
       content,
@@ -50,4 +50,7 @@ export const updatePost = async (
     }
   })
   redirect("/dashboard")
+
+  // redirect()の後には到達しないが、TypeScriptの型チェックのために追加
+  return { success: true, errors: {} }
 }

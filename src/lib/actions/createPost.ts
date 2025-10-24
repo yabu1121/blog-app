@@ -10,10 +10,10 @@ type ActionState = {
   errors: Record<string, string[]>
 }
 export const createPost = async (
-  prevState : ActionState,
-  formData : FormData
-) : Promise<ActionState> => {
-  
+  prevState: ActionState,
+  formData: FormData
+): Promise<ActionState> => {
+
   // フォームの情報を取得
   const title = formData.get('title') as string
   const content = formData.get('content') as string
@@ -21,23 +21,23 @@ export const createPost = async (
   const topImage = topImageInput instanceof File ? topImageInput : null
 
   //バリデーション
-  const validationResult = postSchema.safeParse({title, content, topImage})
-  if(!validationResult.success){
-    return {success:false, errors:validationResult.error.flatten().fieldErrors}
+  const validationResult = postSchema.safeParse({ title, content, topImage })
+  if (!validationResult.success) {
+    return { success: false, errors: validationResult.error.flatten().fieldErrors }
   }
 
 
   //画像保存
-  const imageUrl = topImage ? await saveImage(topImage) : null 
-  if(topImage && !imageUrl){
-    return {success:false, errors:{ image : ["画像の保存に失敗しました"]}}
+  const imageUrl = topImage ? await saveImage(topImage) : null
+  if (topImage && !imageUrl) {
+    return { success: false, errors: { image: ["画像の保存に失敗しました"] } }
   }
 
   //DBに保存
   const session = await auth();
   const userId = session?.user?.id
 
-  if(!session?.user?.email || !userId) {
+  if (!session?.user?.email || !userId) {
     throw new Error('不正なリクエストです')
   }
 
@@ -51,4 +51,7 @@ export const createPost = async (
     }
   })
   redirect("/dashboard")
+
+  // redirect()の後には到達しないが、TypeScriptの型チェックのために追加
+  return { success: true, errors: {} }
 }
